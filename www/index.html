@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta charset="utf-8" />
+  <title>MiniDecaf Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.1/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.1/js/bootstrap.bundle.min.js"></script>
+  <link href="https://cdn.bootcdn.net/ajax/libs/codemirror/5.56.0/codemirror.min.css" rel="stylesheet">
+  <script src="https://cdn.bootcdn.net/ajax/libs/codemirror/5.56.0/codemirror.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/codemirror/5.56.0/mode/clike/clike.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/codemirror/5.56.0/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/codemirror/5.56.0/addon/selection/active-line.min.js"></script>
+
+  <style>
+    .CodeMirror {
+      height: 100%;
+      font-size: large;
+    }
+  </style>
+
+  <script>
+    const EXAMPLE_CODE = `\
+int N = 13;
+int fib(int n) {
+    if (n <= 1) {
+        return n;
+    }
+    return fib(n - 1) + fib(n - 2);
+}
+int calc_fib(int n, int* f) {
+    f[0] = 0; f[1] = 1;
+    for (int i = 2; i <= n; i = i + 1)
+        f[i] = f[i - 1] + f[i - 2];
+}
+int main() {
+    int f[100];
+    calc_fib(N, (int*) f);
+    if (f[N] != fib(N))
+        return -1;
+    return f[N];
+}
+`;
+
+    var inputCM;
+    var outputCM;
+
+    $(document).ready(function () {
+      inputCM = CodeMirror(document.getElementById("minidecaf-input"), {
+        lineNumbers: true,
+        indentUnit: 4,
+        matchBrackets: true,
+        styleActiveLine: true,
+        mode: "text/x-csrc",
+      });
+      inputCM.setValue(EXAMPLE_CODE);
+
+      outputCM = CodeMirror(document.getElementById("minidecaf-output"), {
+        lineNumbers: true,
+        indentUnit: 4,
+        styleActiveLine: true,
+      });
+    });
+  </script>
+</head>
+
+
+<body>
+<div class="container-fluid vh-100">
+
+  <div class="row">
+    <div class="col-1" style="text-align:center;">
+      <h3>Stages:</h3>
+    </div>
+    <div class="col-11 btn-group" role="group" aria-label="Basic example">
+      <button type="button" class="btn btn-secondary" id="btnlex">lex</button>
+      <button type="button" class="btn btn-secondary" id="btnast">ast</button>
+      <button type="button" class="btn btn-secondary" id="btnir">ir</button>
+      <button type="button" class="btn btn-secondary" id="btnasm">asm</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6 p-0 h-100">
+      <div class="col-12 p-0 h-90" id="minidecaf-input"></div>
+    </div>
+    <div class="col-sm-6 p-0 h-100">
+      <div class="col-12 p-0 h-100" id="minidecaf-output"></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="./bootstrap.js"></script>
+
+</body>
